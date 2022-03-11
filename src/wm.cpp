@@ -31,6 +31,7 @@ export class WM {
             }
 
             _root = DefaultRootWindow(_display);
+            _handler = Handler(_display);
         }
 
         ~WM()  {
