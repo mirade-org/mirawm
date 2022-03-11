@@ -3,10 +3,14 @@
 # Copyright (c) mirade-org, Antonin Hérault
 
 CXX = g++
-LIBS = -lX11
-CXX_FLAGS = -fmodules-ts $(LIBS)
+LIBS = -lX11 -W -Wall -Wextra -g -pedantic
+CXX_FLAGS = -fmodules-ts $(LIBS) -I include
 
-SRC = $(shell find src -name '*.cpp' | tac)
+SRC = \
+	src/utils.cpp \
+	src/handler.cpp \
+	src/wm.cpp \
+	src/main.cpp \
 
 BIN = build/out/mirawm
 
@@ -18,5 +22,9 @@ build : _init $(BIN)
 run : build
 	./$(BIN)
 
-$(BIN) : $(SRC)
-	$(CXX) $(CXX_FLAGS) $^ -o $@
+clean : 
+	rm -rf build/out/
+	rm -rf gcm.cache
+
+$(BIN) : $(wildcard src/*.cpp)
+	$(CXX) $(CXX_FLAGS) $(SRC) -o $@
