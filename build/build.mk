@@ -20,7 +20,11 @@ _init :
 build : _init $(BIN)
 
 run : build 
-	xinit ./build/xinitrc
+	xinit ./build/xinitrc.test
+
+install : build
+	sudo cp -f build/xinitrc.mirawm /bin/
+	sudo cp -f $(BIN) /bin/
 
 clean : 
 	rm -rf build/out/

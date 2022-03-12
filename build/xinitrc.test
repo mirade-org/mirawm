@@ -5,4 +5,4 @@
 xterm &
 
 # Run
-exec /mnt/Data/Documents/mirade/mirawm/build/out/mirawm
+exec ./build/out/mirawm

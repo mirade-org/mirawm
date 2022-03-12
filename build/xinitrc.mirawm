@@ -1,0 +1,8 @@
+# This file is part of "mirawm"
+# Under the MIT License
+# Copyright (c) mirade-org, Antonin Hérault
+
+xterm &
+
+# Run
+exec /bin/mirawm
