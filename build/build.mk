@@ -20,7 +20,11 @@ _init :
 build : _init $(BIN)
 
 run : build 
-	xinit ./build/xinitrc.test
+	xinit ./build/xinitrc.test -- \
+    /usr/bin/Xephyr \
+        :100 \
+        -ac \
+        -screen 1280x720 \
 
 install : build
 	sudo cp -f build/xinitrc.mirawm /bin/
