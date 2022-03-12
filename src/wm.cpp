@@ -22,9 +22,9 @@ export class WM {
     private:
         Display *_display;
         Handler _handler;
-        std::map<Window, Window> _clients;
 
     public:
+        std::map<Window, Window> _clients;
         Window _root;
 
     public:
@@ -208,6 +208,20 @@ export class WM {
                 with (MapRequest,
                     _handler.on_map_request(this, event.xmaprequest);
                 );
+
+                with (ButtonPress,
+                    _handler.on_button_press(event.xbutton);
+                );
+                with (ButtonRelease,
+                    _handler.on_button_release(this, event.xbutton);
+                );
+                with (KeyPress,
+                    _handler.on_key_press(event.xkey);
+                );
+                with (KeyRelease,
+                    _handler.on_key_release(event.xkey);
+                );
+
                 default: break;
             }
         }

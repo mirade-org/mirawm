@@ -5,6 +5,7 @@
 module;
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 export module handler;
 
@@ -90,4 +91,49 @@ export class Handler {
             wm->frame(event.window, false);
             XMapWindow(_display, event.window);
         }
+
+        void on_button_press(const XButtonPressedEvent &event) {}
+
+	template <class WM>
+        void on_button_release(WM *wm, const XButtonReleasedEvent &event) {
+            const Window frame = wm->_clients[event.window];
+
+            Window returned_root;
+            int x = 0;
+            int y = 0;
+            u_int width = 0;
+            u_int height = 0;
+            u_int border_width = 0;
+            u_int depth = 0;
+
+            XGetGeometry(
+                _display,
+                frame,
+                &returned_root,
+                &x,
+                &y,
+                &width,
+                &height,
+                &border_width,
+                &depth
+            );
+
+            XRaiseWindow(_display, frame); // place the window at the top
+        }
+
+        void on_key_press(const XKeyPressedEvent &event) {
+            // Close a window when ALT + F4 pressed
+            if (
+                (event.state & Mod1Mask) &&
+                (event.keycode == XKeysymToKeycode(_display, XK_F4))
+            ) {
+                // Agressive way to kill a window
+                XKillClient(_display, event.window);
+                return;
+            }
+
+            // Others...
+        }
+
+        void on_key_release(const XKeyReleasedEvent &event) {}
 };
