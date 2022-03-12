@@ -51,7 +51,19 @@ export class Handler {
         void on_create_notify(const XCreateWindowEvent &event) {}
         void on_destroy_notify(const XDestroyWindowEvent &event) {}
         void on_reparent_notify(const XReparentEvent &event) {}
-        
+        void on_configure_notify(const XConfigureEvent &event) {}
+        void on_map_notify(const XMapEvent &event) {}
+
+        template <class WM>
+        void on_unmap_notify(WM *wm, const XUnmapEvent &event) {
+            // Ignore reparented pre-existing window
+            if (event.event == wm->_root) {
+                return;
+            }
+
+            wm->unframe(event.window);
+        }
+
         /**
          * Configure a window like requested
         */
@@ -71,5 +83,11 @@ export class Handler {
                 event.value_mask, 
                 &changes
             );
+        }
+
+        template <class WM>
+        void on_map_request(WM *wm, const XMapRequestEvent &event) {
+            wm->frame(event.window, false);
+            XMapWindow(_display, event.window);
         }
 };

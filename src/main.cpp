@@ -2,11 +2,9 @@
 // Under the MIT License
 // Copyright (c) mirade-org, Antonin Hérault
 
-// folder "wm"
 import handler;
-import wm;
-
 import utils;
+import wm;
 
 int main() {
     WM mirawm = WM();
