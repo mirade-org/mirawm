@@ -5,6 +5,7 @@
 module;
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <map>
 #include "utils.hpp"
 
@@ -129,6 +130,17 @@ export class WM {
 
             XMapWindow(_display, frame);
             _clients[window] = frame; // save frame handler
+
+            // Close window by ALT + F4
+            XGrabKey(
+                _display,
+                XKeysymToKeycode(_display, XK_F4),
+                Mod1Mask,
+                window,
+                false,
+                GrabModeAsync,
+                GrabModeAsync
+            );
         }
 
         /**
