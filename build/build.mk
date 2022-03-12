@@ -19,8 +19,8 @@ _init :
 
 build : _init $(BIN)
 
-run : build
-	./$(BIN)
+run : build 
+	xinit ./build/xinitrc
 
 clean : 
 	rm -rf build/out/
