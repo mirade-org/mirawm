@@ -37,7 +37,11 @@ export class Handler {
          * @param display Needed to be an X11 handler 
         */
         static int on_XError(Display *display, XErrorEvent *event) {
-            return todo(0);
+            char error_text[1024];
+            XGetErrorText(display, event->error_code, error_text, 1024);
+            // print XRequestCodeToString(event->request_code)
+            
+            return 0;
         }
 
         /**
@@ -121,14 +125,38 @@ export class Handler {
             XRaiseWindow(_display, frame); // place the window at the top
         }
 
-        void on_key_press(const XKeyPressedEvent &event) {
+        template <class WM>
+        void on_key_press(WM *wm, const XKeyPressedEvent &event) {
             // Close a window when ALT + F4 pressed
             if (
                 (event.state & Mod1Mask) &&
                 (event.keycode == XKeysymToKeycode(_display, XK_F4))
             ) {
                 // Agressive way to kill a window
+                // TODO : safe kill alternative when it's possible
                 XKillClient(_display, event.window);
+                return;
+            }
+            
+            // Switch to another window when ALT + TAB pressed
+            if (
+                (event.state & Mod1Mask) &&
+                (event.keycode == XKeysymToKeycode(_display, XK_Tab))
+            ) {
+                auto i = wm->_clients.find(event.window);
+                ++i;
+                if (i == wm->_clients.end()) {
+                    i = wm->_clients.begin();
+                }
+
+                XRaiseWindow(_display, i->second);
+                XSetInputFocus(
+                    _display, 
+                    i->first, 
+                    RevertToPointerRoot, 
+                    CurrentTime
+                );
+
                 return;
             }
 

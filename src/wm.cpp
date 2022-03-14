@@ -141,6 +141,17 @@ export class WM {
                 GrabModeAsync,
                 GrabModeAsync
             );
+
+            // Switch to another window by ALT + TAB
+            XGrabKey(
+                _display,
+                XKeysymToKeycode(_display, XK_Tab),
+                Mod1Mask,
+                window,
+                false,
+                GrabModeAsync,
+                GrabModeAsync
+            );
         }
 
         /**
@@ -216,7 +227,7 @@ export class WM {
                     _handler.on_button_release(this, event.xbutton);
                 );
                 with (KeyPress,
-                    _handler.on_key_press(event.xkey);
+                    _handler.on_key_press(this, event.xkey);
                 );
                 with (KeyRelease,
                     _handler.on_key_release(event.xkey);
