@@ -8,6 +8,7 @@ CXX_FLAGS = -fmodules-ts $(LIBS) -I include
 
 SRC = \
 	src/utils.cpp \
+	src/notify.cpp \
 	src/handler.cpp \
 	src/wm.cpp \
 	src/main.cpp \
